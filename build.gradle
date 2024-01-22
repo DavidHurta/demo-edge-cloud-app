@@ -1,0 +1,42 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.example.Main'
+        )
+    }
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'org.example.Main'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.kafka:kafka-clients:3.4.0'
+    implementation 'org.slf4j:slf4j-api:2.0.5'
+    implementation 'org.slf4j:slf4j-simple:2.0.5'
+    implementation 'org.apache.kafka:connect-json:3.4.0'
+    implementation 'commons-cli:commons-cli:1.6.0'
+    implementation 'org.apache.kafka:kafka-streams:3.4.0'
+    implementation 'org.apache.kafka:kafka-clients:3.4.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
+    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+}
+
+test {
+    useJUnitPlatform()
+}

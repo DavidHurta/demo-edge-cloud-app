@@ -1,0 +1,69 @@
+#
+#  Author: David Hurta (xhurta04)
+#  Project: DIP
+#
+version: "2"
+
+services:
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - DYNAMIC_CONFIG_ENABLED=true
+  kafka-edge:
+    hostname: kafka-edge
+    image: docker.io/bitnami/kafka:3.6
+    ports:
+      - "9094:9094"
+    volumes:
+      - "kafka_data_edge:/bitnami"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-edge:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+  kafka-cloud:
+    hostname: kafka-cloud
+    image: docker.io/bitnami/kafka:3.6
+    ports:
+      - "9095:9095"
+    volumes:
+      - "kafka_data_cloud:/bitnami"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-cloud:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9095
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092,EXTERNAL://localhost:9095
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+  kafka-mirror:
+      image: ambuds/mirror-maker@sha256:14c377f244a8c0208dea6270d7955f1b99b392c66a2a64769bcf631e115a0b91
+      environment:
+        - WHITELIST=edge-server-01
+        - DESTINATION=kafka-cloud:9092
+        - SOURCE=kafka-edge:9092
+  edge-cloud-app-edge-device:
+    image: edge-cloud:latest
+    entrypoint: "java -jar /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar"
+    command: ["--servers", "kafka-edge:9092", "--sleep", "100", "--count", "1500", "--mode", "EdgeDevice"]
+  edge-cloud-app-edge-server:
+    image: edge-cloud:latest
+    entrypoint: "java -jar /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar"
+    command: ["--servers", "kafka-edge:9092", "--mode", "EdgeServer"]
+  edge-cloud-app-cloud-server:
+    image: edge-cloud:latest
+    entrypoint: "java -jar /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar"
+    command: ["--servers", "kafka-cloud:9092", "--mode", "CloudServer"]
+volumes:
+  kafka_data_edge:
+    driver: local
+  kafka_data_cloud:
+    driver: local
