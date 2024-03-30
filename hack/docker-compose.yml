@@ -52,15 +52,12 @@ services:
         - SOURCE=kafka-edge:9092
   edge-cloud-app-edge-device:
     image: edge-cloud:latest
-    entrypoint: "java -jar /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar"
     command: ["--servers", "kafka-edge:9092", "--sleep", "100", "--count", "1500", "--mode", "EdgeDevice"]
   edge-cloud-app-edge-server:
     image: edge-cloud:latest
-    entrypoint: "java -jar /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar"
     command: ["--servers", "kafka-edge:9092", "--mode", "EdgeServer"]
   edge-cloud-app-cloud-server:
     image: edge-cloud:latest
-    entrypoint: "java -jar /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar"
     command: ["--servers", "kafka-cloud:9092", "--mode", "CloudServer"]
 volumes:
   kafka_data_edge:

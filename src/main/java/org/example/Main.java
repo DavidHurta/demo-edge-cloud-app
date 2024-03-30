@@ -16,7 +16,7 @@ public class Main {
         Option option = Option.builder("servers").longOpt("servers")
                 .argName("servers")
                 .hasArg()
-                .required(true)
+                .required(false)
                 .desc("Kafka Bootstrap Servers.").build();
         options.addOption(option);
         option = Option.builder("c").longOpt("count")
@@ -37,12 +37,24 @@ public class Main {
                 .required(false)
                 .desc("Mode of the application. Valid values: EdgeDevice, EdgeServer, CloudServer.").build();
         options.addOption(option);
+        option = Option.builder("h").longOpt("help")
+                .desc("Display help information.").build();
+        options.addOption(option);
         CommandLineParser parser = new DefaultParser();
-        CommandLine cmd;
+        CommandLine cmd = null;
+        HelpFormatter formatter = new HelpFormatter();
+        String header = "A demonstration application for the Edge Cloud world!";
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
+            formatter.printHelp("Edge-Cloud App", header, options, "");
+            System.exit(1);
+        }
+
+        if (cmd.hasOption("help")) {
+            formatter.printHelp("Edge-Cloud App", header, options, "");
+            System.exit(0);
         }
 
         // Set Configuration
