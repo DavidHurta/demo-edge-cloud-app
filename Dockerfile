@@ -3,12 +3,15 @@
 #  Project: DIP
 #
 # Structure inspired by https://stackoverflow.com/a/74951353
+
+# Build Stage: Create a JAR file that contains all dependciess
 FROM gradle:latest AS BUILD
 WORKDIR /usr/app/
-COPY . . 
+COPY . .
 RUN gradle shadowJar
+
+# Final Stage: Create the final image
 FROM openjdk:latest
-ENV JAR_NAME=demo-sensor-1.0-SNAPSHOT-all.jar
 WORKDIR /usr/app/
 COPY --from=BUILD /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar app.jar
 ENTRYPOINT ["java", "-jar", "/usr/app/app.jar"]
