@@ -80,7 +80,7 @@ public class CloudServer {
                                 node.get("freeSwapSpaceSizePercentage").doubleValue() < 0.1 ||
                                 node.get("freeSwapSpaceSizePercentage").doubleValue() < 0.1
                         ){
-                            status = "Machines Are Being Heavily Utilized, ";
+                            status = "Machines Are Being Heavily Utilized";
                         }
                         node.put("status", status);
                         return KeyValue.pair(key.key(), (JsonNode) node);
