@@ -65,7 +65,7 @@ services:
         - |
           touch /tmp/mm2.properties
           echo "
-          # Documentation can be found at https://kafka.apache.org/documentation/
+          # Documentation for fields can be found at https://kafka.apache.org/documentation/
           clusters = source, destination
           source.bootstrap.servers = kafka-edge:9092
           destination.bootstrap.servers = kafka-cloud:9092
