@@ -22,7 +22,6 @@ import org.apache.kafka.connect.json.JsonSerializer;
 import org.apache.kafka.connect.json.JsonDeserializer;
 import org.apache.kafka.streams.kstream.*;
 
-import java.time.Duration;
 import java.util.Properties;
 
 public class CloudServer {
@@ -42,7 +41,7 @@ public class CloudServer {
         sourceStream
                 .map((key, value) -> KeyValue.pair("edge-server-01", value))
                 .groupByKey(Grouped.with(Serdes.String(), jsonSerde))
-                .windowedBy(TimeWindows.of(Duration.ofSeconds(30)))
+                .windowedBy(TimeWindows.of(config.getAggregationWindow()))
                 .aggregate(
                         () -> objectMapper.valueToTree(new AggregateAverage()),
                         (key, value, aggregate) -> {

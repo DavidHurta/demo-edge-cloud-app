@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -22,7 +23,6 @@ import org.apache.kafka.connect.json.JsonSerializer;
 import org.apache.kafka.connect.json.JsonDeserializer;
 import org.apache.kafka.streams.kstream.*;
 
-import java.time.Duration;
 import java.util.Properties;
 
 public class EdgeServer {
@@ -41,7 +41,7 @@ public class EdgeServer {
         KStream<String, JsonNode> sourceStream = builder.stream("edge-device-01", Consumed.with(stringSerde, jsonSerde));
         sourceStream
                 .groupByKey()
-                .windowedBy(TimeWindows.of(Duration.ofSeconds(30)))
+                .windowedBy(TimeWindows.of(config.getAggregationWindow()))
                 .aggregate(
                        () -> objectMapper.valueToTree(new AggregateAverage()),
                        (key, value, aggregate) -> {

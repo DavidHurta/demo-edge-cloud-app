@@ -7,6 +7,7 @@ package org.example;
 
 import org.apache.commons.cli.*;
 
+import java.time.Duration;
 import java.util.Objects;
 
 public class Main {
@@ -36,6 +37,12 @@ public class Main {
                 .hasArg()
                 .required(false)
                 .desc("Mode of the application. Valid values: EdgeDevice, EdgeServer, CloudServer.").build();
+        options.addOption(option);
+        option = Option.builder("w").longOpt("aggregationWindow")
+                .argName("aggregationWindow")
+                .hasArg()
+                .required(false)
+                .desc("The aggregation window in seconds. Applicable for EdgeServer and CloudServer.").build();
         options.addOption(option);
         option = Option.builder("h").longOpt("help")
                 .desc("Display help information.").build();
@@ -77,6 +84,9 @@ public class Main {
             } else {
                 config.setMode(ConfigurationMode.CloudServer);
             }
+        }
+        if(cmd.hasOption("aggregationWindow")) {
+            config.setAggregationWindow(Duration.ofSeconds(Integer.parseInt(cmd.getOptionValue("aggregationWindow"))));
         }
 
         switch(config.getMode()) {

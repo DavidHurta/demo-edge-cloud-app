@@ -55,10 +55,10 @@ services:
     command: ["--servers", "kafka-edge:9092", "--sleep", "100", "--count", "1500", "--mode", "EdgeDevice"]
   edge-cloud-app-edge-server:
     image: edge-cloud:latest
-    command: ["--servers", "kafka-edge:9092", "--mode", "EdgeServer"]
+    command: ["--servers", "kafka-edge:9092", "--mode", "EdgeServer", "--aggregationWindow", "10"]
   edge-cloud-app-cloud-server:
     image: edge-cloud:latest
-    command: ["--servers", "kafka-cloud:9092", "--mode", "CloudServer"]
+    command: ["--servers", "kafka-cloud:9092", "--mode", "CloudServer", "--aggregationWindow", "20"]
 volumes:
   kafka_data_edge:
     driver: local

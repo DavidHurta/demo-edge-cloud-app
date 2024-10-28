@@ -5,7 +5,7 @@
 
 package org.example;
 
-import java.util.HashMap;
+import java.time.Duration;
 
 public class Configuration {
     private int sleep;
@@ -42,15 +42,24 @@ public class Configuration {
         this.mode = mode;
     }
 
+    public Duration getAggregationWindow() {
+        return aggregationWindow;
+    }
+
+    public void setAggregationWindow(Duration aggregationWindow) {
+        this.aggregationWindow = aggregationWindow;
+    }
+
     private String bootstrapServers;
     private int count;
     private ConfigurationMode mode;
+    private Duration aggregationWindow;
 
     public Configuration() {
         this.bootstrapServers = "127.0.0.1:9094";
         this.count = 10;
         this.sleep = 1000;
         this.mode = ConfigurationMode.EdgeDevice;
+        this.aggregationWindow = Duration.ofSeconds(30);
     }
-
 }
