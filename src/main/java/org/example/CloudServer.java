@@ -51,8 +51,8 @@ public class CloudServer {
                                 aggregateAverage.add("processCpuTime", node.get("processCpuTime").doubleValue());
                                 aggregateAverage.add("processCpuLoad", node.get("processCpuLoad").doubleValue());
                                 aggregateAverage.add("cpuLoad", node.get("cpuLoad").doubleValue());
-                                aggregateAverage.add("freeSwapSpaceSizePercentage",  node.get("freeSwapSpaceSize").doubleValue() / node.get("totalSwapSpaceSize").doubleValue());
-                                aggregateAverage.add("freeMemorySizePercentage", node.get("freeMemorySize").doubleValue() / node.get("totalMemorySize").doubleValue());
+                                aggregateAverage.add("freeSwapSpaceSizePercentage",  Helper.safeDivision(node.get("freeSwapSpaceSize").doubleValue(), node.get("totalSwapSpaceSize").doubleValue()));
+                                aggregateAverage.add("freeMemorySizePercentage", Helper.safeDivision(node.get("freeMemorySize").doubleValue(), node.get("totalMemorySize").doubleValue()));
                                 aggregate = objectMapper.valueToTree(aggregateAverage);
                             } catch (Exception e) {
                                 e.printStackTrace();
