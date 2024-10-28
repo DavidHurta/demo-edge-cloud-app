@@ -12,6 +12,10 @@ services:
       - "8080:8080"
     environment:
       - DYNAMIC_CONFIG_ENABLED=true
+      - KAFKA_CLUSTERS_0_NAME=edge
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-edge:9092
+      - KAFKA_CLUSTERS_1_NAME=cloud
+      - KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS=kafka-cloud:9092
   kafka-edge:
     hostname: kafka-edge
     image: docker.io/bitnami/kafka:3.6
