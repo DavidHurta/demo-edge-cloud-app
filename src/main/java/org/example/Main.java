@@ -24,7 +24,7 @@ public class Main {
                 .argName("count")
                 .hasArg()
                 .required(false)
-                .desc("The number of messages to be sent. Applicable for sensors.").build();
+                .desc("The number of messages to be sent. Applicable for sensors. The value `-1` may be used to indicate the sensor to run indefinitely.").build();
         options.addOption(option);
         option = Option.builder("s").longOpt("sleep")
                 .argName("sleep")

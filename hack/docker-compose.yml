@@ -52,7 +52,7 @@ services:
         - SOURCE=kafka-edge:9092
   edge-cloud-app-edge-device:
     image: edge-cloud:latest
-    command: ["--servers", "kafka-edge:9092", "--sleep", "100", "--count", "1500", "--mode", "EdgeDevice"]
+    command: ["--servers", "kafka-edge:9092", "--sleep", "100", "--count", "-1", "--mode", "EdgeDevice"]
   edge-cloud-app-edge-server:
     image: edge-cloud:latest
     command: ["--servers", "kafka-edge:9092", "--mode", "EdgeServer", "--aggregationWindow", "10"]

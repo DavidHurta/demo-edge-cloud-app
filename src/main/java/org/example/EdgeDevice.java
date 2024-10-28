@@ -41,7 +41,14 @@ public class EdgeDevice {
         JsonNode infoSerialized;
 
         String[] keys = {"admin-machine", "user-01-machine"};
-        for (int i = 0; i < config.getCount(); i++) {
+        int i = 0;
+        while (true) {
+            if (config.getCount() != -1) {
+                if (i >= config.getCount()) {
+                    break;
+                }
+            }
+
             for (String key : keys) {
                 info.Update();
                 try {
@@ -61,6 +68,7 @@ public class EdgeDevice {
                     throw new RuntimeException(e);
                 }
             }
+            i++;
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
