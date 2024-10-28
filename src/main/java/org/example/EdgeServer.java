@@ -61,11 +61,11 @@ public class EdgeServer {
                                aggregateAverage.add("processCpuTime", node.get("processCpuTime").doubleValue());
                                aggregateAverage.add("processCpuLoad", node.get("processCpuLoad").doubleValue());
                                aggregateAverage.add("cpuLoad", node.get("cpuLoad").doubleValue());
-                               aggregateAverage.add("committedVirtualMemorySize", (double) node.get("committedVirtualMemorySize").doubleValue());
-                               aggregateAverage.add("freeSwapSpaceSize", (double) node.get("freeSwapSpaceSize").doubleValue());
-                               aggregateAverage.add("totalSwapSpaceSize", (double) node.get("totalSwapSpaceSize").doubleValue());
-                               aggregateAverage.add("freeMemorySize", (double) node.get("freeMemorySize").doubleValue());
-                               aggregateAverage.add("totalMemorySize", (double) node.get("totalMemorySize").doubleValue());
+                               aggregateAverage.add("committedVirtualMemorySize", node.get("committedVirtualMemorySize").doubleValue());
+                               aggregateAverage.add("freeSwapSpaceSize", node.get("freeSwapSpaceSize").doubleValue());
+                               aggregateAverage.add("totalSwapSpaceSize", node.get("totalSwapSpaceSize").doubleValue());
+                               aggregateAverage.add("freeMemorySize", node.get("freeMemorySize").doubleValue());
+                               aggregateAverage.add("totalMemorySize", node.get("totalMemorySize").doubleValue());
                                aggregate = objectMapper.valueToTree(aggregateAverage);
                            } catch (Exception e) {
                                e.printStackTrace();
