@@ -24,12 +24,22 @@ import org.apache.kafka.connect.json.JsonDeserializer;
 import org.apache.kafka.streams.kstream.*;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class EdgeServer {
-    public static void run(Configuration config) {
+    public static void run(Configuration config) throws InterruptedException {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-stream-edge-server");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrapServers());
+
+        String sourceTopicName = "edge-device-01";
+        while (!Helper.doesTopicExist(props, sourceTopicName)) {
+            System.out.printf(
+                    "Waiting for a topic `%s` to be created, will try again in %d milliseconds.\n",
+                    sourceTopicName,
+                    config.getSleep());
+            TimeUnit.MILLISECONDS.sleep(config.getSleep());
+        }
 
         final ObjectMapper objectMapper = new ObjectMapper();
         final Serde<String> stringSerde = Serdes.String();
@@ -38,7 +48,7 @@ public class EdgeServer {
         final Serde<JsonNode> jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, JsonNode> sourceStream = builder.stream("edge-device-01", Consumed.with(stringSerde, jsonSerde));
+        KStream<String, JsonNode> sourceStream = builder.stream(sourceTopicName, Consumed.with(stringSerde, jsonSerde));
         sourceStream
                 .groupByKey()
                 .windowedBy(TimeWindows.of(config.getAggregationWindow()))

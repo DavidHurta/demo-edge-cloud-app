@@ -23,12 +23,22 @@ import org.apache.kafka.connect.json.JsonDeserializer;
 import org.apache.kafka.streams.kstream.*;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class CloudServer {
-    public static void run(Configuration config) {
+    public static void run(Configuration config) throws InterruptedException {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-streams-cloud-server");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, config.getBootstrapServers());
+
+        String sourceTopicName = "edge-server-01";
+        while (!Helper.doesTopicExist(props, sourceTopicName)) {
+            System.out.printf(
+                    "Waiting for a topic `%s` to be created, will try again in %d milliseconds.\n",
+                    sourceTopicName,
+                    config.getSleep());
+            TimeUnit.MILLISECONDS.sleep(config.getSleep());
+        }
 
         final ObjectMapper objectMapper = new ObjectMapper();
         final Serde<String> stringSerde = Serdes.String();
@@ -37,9 +47,9 @@ public class CloudServer {
         final Serde<JsonNode> jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, JsonNode> sourceStream = builder.stream("edge-server-01", Consumed.with(stringSerde, jsonSerde));
+        KStream<String, JsonNode> sourceStream = builder.stream(sourceTopicName, Consumed.with(stringSerde, jsonSerde));
         sourceStream
-                .map((key, value) -> KeyValue.pair("edge-server-01", value))
+                .map((key, value) -> KeyValue.pair(sourceTopicName, value)) // do not aggregate by key
                 .groupByKey(Grouped.with(Serdes.String(), jsonSerde))
                 .windowedBy(TimeWindows.of(config.getAggregationWindow()))
                 .aggregate(
