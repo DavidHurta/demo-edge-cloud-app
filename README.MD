@@ -1,12 +1,8 @@
-# TERM PROJECT
-
-
-Author: David Hurta
+# Kafka Edge-Cloud Application
 
 To deploy the application, an internet connection is required
-for obtaining container images. Subsequently, `docker` and 
+for obtaining the container images. Subsequently, `docker` and 
 `docker-compose` commands are needed.
-
 
 To build an `edge-cloud:latest` image, run:
 ```shell
