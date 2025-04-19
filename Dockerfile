@@ -5,7 +5,7 @@
 # Structure inspired by https://stackoverflow.com/a/74951353
 
 # Build Stage: Create a JAR file that contains all dependciess
-FROM gradle:jdk21 AS BUILD
+FROM gradle:jdk21 AS build
 WORKDIR /usr/app/
 COPY . .
 RUN gradle shadowJar
@@ -13,6 +13,6 @@ RUN gradle shadowJar
 # Final Stage: Create the final image
 FROM amazoncorretto:21
 WORKDIR /usr/app/
-COPY --from=BUILD /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar app.jar
+COPY --from=build /usr/app/build/libs/demo-sensor-1.0-SNAPSHOT-all.jar app.jar
 ENTRYPOINT ["java", "-jar", "/usr/app/app.jar"]
 CMD ["--help"]
