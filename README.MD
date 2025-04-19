@@ -1,4 +1,4 @@
-# Kafka Edge-Cloud Application
+# Demonstration Kafka Edge-Cloud Application
 
 To deploy the application, an internet connection is required
 for obtaining the container images. Subsequently, `docker` and 
