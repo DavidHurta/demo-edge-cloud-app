@@ -2,7 +2,6 @@
 #  Author: David Hurta (xhurta04)
 #  Project: DIP
 #
-version: "2"
 
 services:
   kafka-ui:
