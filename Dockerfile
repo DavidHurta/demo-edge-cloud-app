@@ -2,7 +2,7 @@
 #  Author: David Hurta (xhurta04)
 #  Project: DIP
 #
-# Structure inspired by https://stackoverflow.com/a/74951353
+# Structure inspired by https://stackoverflow.com/a/74951353 by Abdelsalam Megahed (https://stackoverflow.com/users/11428614/abdelsalam-megahed)
 
 # Build Stage: Create a JAR file that contains all dependciess
 FROM gradle:jdk21 AS build
